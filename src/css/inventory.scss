@@ -1,0 +1,23 @@
+.products {
+	&__create-input {
+		margin: 0 auto 5px;
+		width: 300px;
+	}
+
+	&__create-button {
+		display: block;
+		margin: 0 auto 20px;
+	}
+
+	&__sku{
+		&--WARNING{
+			background-color:#DEF3CA;
+		}
+	}
+
+}
+
+th,td{
+	font-size: 16px;
+	text-align: center;
+}

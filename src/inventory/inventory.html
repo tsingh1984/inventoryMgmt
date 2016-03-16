@@ -1,0 +1,58 @@
+<div class="container">
+	<a ui-sref="todos" class="nav-link">ToDos</a>
+	<h2>GRG Wines - Current Inventory</h2>
+
+	<button ng-if="!editMode" class="btn btn-info product__create-cancel-button" ng-click="editOnClick()">Edit</button>
+	<button ng-if="editMode" class="btn btn-danger product__create-cancel-button" ng-click="editOffClick()">Edit OFF</button>
+	<button class="btn btn-info" ng-click="getWebsiteData()">GRGWines.COM Data</button>
+	<button ng-if="!addProduct" class="btn btn-default product__create-cancel-button" ng-click="onAddProductClick()" >+</button>
+	
+	<div ng-if="addProduct" >
+		<form ng-submit="createProduct()">
+			<input class="form-control product__create-input" placeholder="Model Number" ng-model="data.createProductSKU"/>
+			<input class="form-control product__create-input" placeholder="Item Name" ng-model="data.createProductName" />
+			<input class="form-control product__create-input" placeholder="In Stock" ng-model="data.createProductStock" />
+			<button class="btn btn-success product__create-button">Add Product</button>
+		</form>
+			<button class="btn btn-default product__create-cancel-button" ng-click="onAddProductCancelClick()">Cancel</button>
+	</div>
+	
+	<input class="form-control inventory__search" placeholder="Search Inventory..." ng-model="data.searchText" ng-init="data.searchText=''" style="display:inline-block;width:200px;"/>
+	<table class="table table-striped">
+		<tr>
+			<th>SKU</th>
+			<th>Product Name</th>
+			<th>Available Stock</th>
+			<th ng-hide="!editMode">Min Stock Allowed</th>
+			<th ng-hide="!editMode">Actions</th>
+		</tr>	
+		<tr ng-repeat="product in products | filter:data.searchText " ng-class= "{warning : product.inventoryStatus == 'WARNING',
+																		    danger  : product.inventoryStatus == 'ORDER',
+													 					    success : product.inventoryStatus == 'OK'}">
+			<td><span ng-if="!product.isEditing" class="products__sku">{{product.sku}}</span>
+				<input type="text" ng-if="product.isEditing" class"form-control products__sku-edit" ng-value="product.sku" ng-model="product.sku"></td>		
+			<td><span ng-if="!product.isEditing" class="products__sku">{{product.name}}</span>
+				<input type="text" ng-if="product.isEditing" class"form-control products__name-edit" ng-value="product.name" ng-model="product.name"></td>
+			<td>
+				<span ng-if="!product.isEditing">
+					<button class="btn btn-info" ng-click="onAddStockClick(product)">+</button>
+					<span class="products__stock">{{product.stock}}</span>
+					<button class="btn btn-info" ng-click="onSubtractStockClick(product)">-</button>
+				</span>
+				<input type="number" ng-if="product.isEditing" class"form-control products__stock-edit" ng-value="product.stock" ng-model="product.stock">
+			</td>
+			<td ng-hide="!editMode">
+				<span ng-if="editMode && !product.isEditing" class="products__minStockAllowed">{{product.minStockAllowed}}</span>
+				<input type="number" ng-if="product.isEditing" class"form-control products__minStockAllowed-edit" ng-value="product.minStockAllowed" ng-model="product.minStockAllowed">
+			</td>
+			<td ng-hide="!editMode">
+				<button ng-if="!product.isEditing" class="btn btn-info" ng-click="onEditClick(product)">Edit</button>
+				<button ng-if="!product.isEditing" class="btn btn-danger" ng-click="onDeleteClick(product)">Delete</button>
+
+				<button ng-if="product.isEditing" class="btn btn-primary" ng-click="onSaveClick(product)">Save</button>
+				<button ng-if="product.isEditing" class="btn btn-default" ng-click="onEditCancelClick(product)">Cancel</button>
+			</td>
+		</tr>	
+	</table>
+
+</div>
